@@ -2,9 +2,9 @@ package e1;
 
 public class Producto {
 
-    int stock;
-    String producto;
-    String codigoProducto;
+    private int stock;
+    private final String producto;
+    private final String codigoProducto;
 
     public Producto(int stock, String producto, String codigoProducto) {
         this.stock = stock;

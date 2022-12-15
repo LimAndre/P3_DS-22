@@ -3,14 +3,12 @@ package e1.FasesCompra;
 import e1.Order;
 
 public class CheckOut extends FaseCompra {
+
     private static final CheckOut instancia= new CheckOut();
-
     private CheckOut(){}
-
     public static CheckOut getInstancia(){
         return instancia;
     }
-
 
     @Override
     public void Cancelled(Order Order) {

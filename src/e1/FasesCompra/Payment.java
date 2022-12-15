@@ -28,7 +28,6 @@ public class Payment extends FaseCompra {
         Order.completed();
     }
 
-
     @Override
     public void Payment(Order Order) {
         Order.fase=Payment.getInstancia();
