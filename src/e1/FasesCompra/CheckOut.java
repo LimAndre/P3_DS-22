@@ -11,30 +11,32 @@ public class CheckOut extends FaseCompra {
     }
 
     @Override
-    public void Cancelled(Order Order) {
-
+    public void Cancelled(Order order) {
+        throw new IllegalArgumentException("Primero tienes que pagar");
     }
 
     @Override
-    public void Completed(Order Order) {
-
+    public void Completed(Order order) {
+        throw new IllegalArgumentException("Primero tienes que pagar");
     }
 
     @Override
-    public void Payment(Order Order) {
-        Order.fase=Payment.getInstancia();
-        Order.payment();
+    public void Payment(Order order) {
+        order.fase=Payment.getInstancia();
+        order.getCarrito().logFases();
+        order.solicitarPago();
     }
 
     @Override
-    public void Shopping(Order Order) {
-
+    public void Shopping(Order order) {
+        order.fase=Shopping.getInstancia();
+        order.getCarrito().logFases();
+        order.seguirComprando();
     }
 
     @Override
-    public void CheckOut(Order Order) {
-        Order.fase=CheckOut.getInstancia();
-        Order.fase.screenInfo(Order);
+    public void CheckOut(Order order) {
+        screenInfo(order);
     }
 
     @Override

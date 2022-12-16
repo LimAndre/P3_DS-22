@@ -13,31 +13,28 @@ public class Cancelled extends FaseCompra{
     }
 
     @Override
-    public void Cancelled(Order Order) {
-        Order.fase=Cancelled.getInstancia();
-        screenInfo(Order);
+    public void Cancelled(Order order) {
+        screenInfo(order);
     }
 
     @Override
-    public void Completed(Order Order) {
-        throw new IllegalArgumentException("No puedes haber pagar si ya has cancelado");
+    public void Completed(Order order) {
+        throw new IllegalArgumentException("No puedes completar si ya has cancelado");
     }
 
     @Override
-    public void Payment(Order Order) {
-        Order.fase=Payment.getInstancia();
-        Order.payment();
+    public void Payment(Order order) {
+        throw new IllegalArgumentException("No puedes pagar si ya has cancelado");
     }
 
     @Override
-    public void Shopping(Order Order) {
-
+    public void Shopping(Order order) {
+        throw new IllegalArgumentException("No puedes comprar si ya has cancelado");
     }
 
     @Override
-    public void CheckOut(Order Order) {
-        Order.fase=CheckOut.getInstancia();
-        Order.checkout();
+    public void CheckOut(Order order) {
+        throw new IllegalArgumentException("No puedes checkear si ya has cancelado");
     }
 
     @Override

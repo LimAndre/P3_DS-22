@@ -20,14 +20,21 @@ public class Producto {
         return producto;
     }
 
-    public void removerCantidadProducto(int cantidad){
+    public String getCodigoProducto() {
+        return codigoProducto;
+    }
+
+    public boolean removerCantidadProducto(int cantidad){
         if(stock-cantidad>=0) {
             stock=stock-cantidad;
-        }else throw new IllegalArgumentException("Se han eliminado productos no existentes");
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public boolean tieneStock(int cantidad){
-        return stock - cantidad >= 0;
+        return stock - Math.abs(cantidad) >= 0;
     }
 
 }

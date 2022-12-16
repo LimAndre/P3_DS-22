@@ -1,59 +1,78 @@
 package e1;
 import e1.FasesCompra.Shopping;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Carrito {
 
-    private Map<Producto, Integer> listaProducto= new HashMap<>();
+    private final Map<Producto, Integer> listaProducto= new HashMap<>();
+    private final Order order;
+    ArrayList<String> log= new ArrayList<>();
 
-    public Map<Producto, Integer> getListaProducto() {
-        return listaProducto;
+    public Carrito(Order order) {
+        this.order = order;
     }
 
     public void iniciaCarrito(Order order){
         System.out.println("Order Number "+ order.getNumFacturaActual() + ": "+ order.fase.toString()+ " Phase");
     }
 
-    public void borraStockComprados(){
+    public boolean borraStockComprados(){
+        boolean band=false;
 
         for(Map.Entry<Producto, Integer> entry : listaProducto.entrySet()) {
 
             Producto key = entry.getKey();
             int value = entry.getValue();
 
-            key.removerCantidadProducto(value);
+            band=key.removerCantidadProducto(value);
         }
+
+        return band;
     }
 
-    public void anadirAlCarrito(Producto producto, int cantidad, Order order){
+    public boolean anadirAlCarrito(Producto producto, int cantidad){
         if(producto.tieneStock(cantidad)){
+
+            if(listaProducto.isEmpty()){
+                iniciaCarrito(order);
+            }
+
             listaProducto.put(producto, cantidad);
 
             if(order.fase== Shopping.getInstancia())
                 log(producto, cantidad, true);
             else {
-                logModify(producto, cantidad, true);
+                logModify(producto, cantidad);
             }
+            return true;
         }
+        return false;
     }
 
-    public void eliminarProducto(Producto producto, int cantidad, Order order){
+    public boolean eliminarProducto(Producto producto, int cantidad){
         if(listaProducto.containsKey(producto) && cantidad<= listaProducto.get(producto)){
-            if(listaProducto.get(producto)==0) listaProducto.remove(producto);
 
-            int aux=listaProducto.get(producto)-cantidad;
-            listaProducto.put(producto, aux);
+            int aux=listaProducto.get(producto)-Math.abs(cantidad);
 
-            if(order.fase== Shopping.getInstancia())
-                log(producto, cantidad, false);
-            else{
-                logModify(producto, cantidad, false);
+            if(aux==0){
+                listaProducto.remove(producto);
+            }else{
+                listaProducto.put(producto, aux);
             }
+
+            if(order.fase== Shopping.getInstancia()){
+                log(producto, cantidad, false);
+            }
+            else{
+                logModify(producto, cantidad);
+            }
+            return true;
         }
         else{
-            throw new IllegalArgumentException("No hay suficientes unidades para eleminar");
+            return false;
         }
     }
 
@@ -63,17 +82,24 @@ public class Carrito {
 
     public void log(Producto producto, int cantidad, boolean tipo) {
         if (tipo) {
-            System.out.println("-Add: Item: " + producto.getProducto() + "- Quantity: " + cantidad + " Shopping Cart -- Products : " + numProductos());
+            log.add("-Add: Item: " + producto.getCodigoProducto() + "- Quantity: " + cantidad + "-> Shopping Cart -- Products : " + numProductos());
         }else
-            System.out.println("-Remove: Item: "+ producto.getProducto()+ "- Quantity: "+ cantidad +" Shopping Cart -- Products : "+ numProductos());
+            log.add("-Remove: Item: "+ producto.getCodigoProducto()+ "- Quantity: "+ cantidad +"-> Shopping Cart -- Products : "+ numProductos());
     }
 
-    public void logModify(Producto producto, int cantidad, boolean tipo){
+    public void logModify(Producto producto, int cantidad){
+        log.add("-Modify: Item: "+ producto.getCodigoProducto()+ "- Quantity: "+ cantidad +"-> CheckOut Order -- Products : "+ numProductos());
+    }
 
-        if(tipo)
-            System.out.println("-Modify: Item: "+ producto.getProducto()+ "- Quantity: "+ cantidad +" CheckOut Order -- Products : "+ numProductos());
-        else
-            System.out.println("-Modify: Item: "+ producto.getProducto()+ "- Quantity: "+ cantidad +" CheckOut Order -- Products : "+ numProductos());
+    public void logFases(){
+        log.add("Order number "+ order.getNumFacturaActual()+": "+order.fase.toString()+" phase");
+    }
+
+    public void screenLogCarrito(){
+        System.out.println("=====================================================================");
+        for (String l:log) {
+            System.out.println(l);
+        }
     }
 
 }

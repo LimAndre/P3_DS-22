@@ -12,32 +12,33 @@ public class Shopping extends FaseCompra{
         return instancia;
     }
 
+
     @Override
-    public void Shopping(Order Order) {
-        Order.fase=Shopping.getInstancia();
-        screenInfo(Order);
+    public void Shopping(Order order) {
+        screenInfo(order);
     }
 
     @Override
-    public void CheckOut(Order Order) {
-        Order.fase=CheckOut.getInstancia();
-        Order.checkout();
+    public void CheckOut(Order order) {
+        order.fase=CheckOut.getInstancia();
+        order.getCarrito().logFases();
+        order.checkout();
     }
 
     @Override
-    public void Cancelled(Order Order) {
+    public void Cancelled(Order order) {
         throw new IllegalArgumentException("Primero tienes que pagar");
     }
 
     @Override
-    public void Completed(Order Order) {
+    public void Completed(Order order) {
         throw new IllegalArgumentException("Primero tienes que pagar");
     }
 
     @Override
-    public void Payment(Order Order) {
-        Order.fase=Payment.getInstancia();
-        Order.payment();
+    public void Payment(Order order) {
+        order.fase=CheckOut.getInstancia();
+        order.solicitarPago();
     }
 
     @Override

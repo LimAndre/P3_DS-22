@@ -13,30 +13,29 @@ public class Completed extends FaseCompra {
     }
 
     @Override
-    public void Cancelled(Order Order) {
-
+    public void Cancelled(Order order) {
+        throw new IllegalArgumentException("No puedes cancelar si ya has completado");
     }
 
     @Override
-    public void Completed(Order Order) {
-        Order.getCarrito().borraStockComprados();
-        screenInfo(Order);
+    public void Completed(Order order) {
+        order.getCarrito().borraStockComprados();
+        screenInfo(order);
     }
 
     @Override
-    public void Payment(Order Order) {
-
+    public void Payment(Order order) {
+        throw new IllegalArgumentException("No puedes pagar si ya has completado");
     }
 
     @Override
-    public void Shopping(Order Order) {
-
+    public void Shopping(Order order) {
+        throw new IllegalArgumentException("No puedes seguir comprando si ya has completado");
     }
 
     @Override
-    public void CheckOut(Order Order) {
-        Order.fase=CheckOut.getInstancia();
-        Order.checkout();
+    public void CheckOut(Order order) {
+        throw new IllegalArgumentException("No puedes checkear si ya has completado");
     }
 
     @Override

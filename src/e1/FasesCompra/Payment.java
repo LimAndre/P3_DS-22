@@ -8,42 +8,38 @@ import java.time.format.DateTimeFormatter;
 public class Payment extends FaseCompra {
 
     private static final Payment instancia= new Payment();
-
     private Payment(){}
-
     public static Payment getInstancia(){
         return instancia;
     }
-
     private final DateTimeFormatter fechaYhora = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm:ss");
 
+
     @Override
-    public void Cancelled(Order Order) {
-        Order.fase= Cancelled.getInstancia();
+    public void Cancelled(Order order) {
+        order.fase= Cancelled.getInstancia();
+        order.cancelled();
     }
 
     @Override
-    public void Completed(Order Order) {
-        Order.fase=Completed.getInstancia();
-        Order.completed();
+    public void Completed(Order order) {
+        order.fase=Completed.getInstancia();
+        order.completed();
     }
 
     @Override
-    public void Payment(Order Order) {
-        Order.fase=Payment.getInstancia();
-        screenInfo(Order);
+    public void Payment(Order order) {
+        screenInfo(order);
     }
 
     @Override
-    public void Shopping(Order Order) {
-        Order.fase=Shopping.getInstancia();
-        Order.shopping();
+    public void Shopping(Order order) {
+        throw new IllegalArgumentException("Ya has pagado");
     }
 
     @Override
-    public void CheckOut(Order Order) {
-        Order.fase=CheckOut.getInstancia();
-        Order.checkout();
+    public void CheckOut(Order order) {
+        throw new IllegalArgumentException("Ya has pagado");
     }
 
     @Override
